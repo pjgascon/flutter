@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:superhero_app/data/model/superhero_detail_response.dart';
 import 'package:superhero_app/data/model/superhero_response.dart';
 import 'package:superhero_app/data/repository.dart';
+import 'package:superhero_app/screens/superhero_detail_screen.dart';
 
 class SuperheroSearchScreen extends StatefulWidget {
   const SuperheroSearchScreen({super.key});
@@ -45,10 +47,7 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
                   child: ListView.builder(
                     itemCount: superhero.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(superhero[index].name),
-                        subtitle: Text('ID: ${superhero[index].id}'),
-                      );
+                      return itemSuperhero(superhero[index]);
                     },
                   ),
                 );
@@ -61,4 +60,38 @@ class _SuperheroSearchScreenState extends State<SuperheroSearchScreen> {
       ),
     );
   }
+
+  Padding itemSuperhero(SuperheroDetailResponse item) => Padding(
+    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
+    child: GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SuperheroDetailScreen(superhero: item),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red),
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: Image.network(
+                item.url,
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Text(item.name),
+          ],
+        ),
+      ),
+    ),
+  );
 }
